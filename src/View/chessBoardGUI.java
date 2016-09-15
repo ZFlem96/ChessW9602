@@ -16,8 +16,6 @@ import java.util.List;
 
 /**
  * This class handles the GUI for the board and the pieces on it.
- * The inspiration for this setup was taken from this easy youtube tutorial with certain changes:
- * CITATION: https://www.youtube.com/watch?v=peU0xIhkBws
  */
 public class chessBoardGUI {
 
