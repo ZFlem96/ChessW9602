@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Player {
     public ArrayList<Pieces> playerPieces; //a list to hold all the Model.pieces the player is playing with
     public ArrayList<Pieces> opponentPieces; //a list to hold all the Model.pieces the opponent is playing with
+    public int score = 0; //player score, used alongside the GUI
 
     /**
      * Class constructor

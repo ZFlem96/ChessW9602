@@ -1,13 +1,21 @@
 package View;
 
+import Controller.chessController;
 import Model.core.chessBoard;
 import Model.core.chessGame;
+import Model.pieces.Pieces;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+
 
 
 /**
@@ -21,20 +29,132 @@ public class chessBoardGUI {
     private final Color lightPieceColor = Color.decode("#ffce9e");
     private final Color darkPieceColor = Color.decode("#d18b47");
     public chessBoardGUI.boardPanel boardPanel;
+    private final ArrayList<Pieces> moveHistory;
+    private JFrame gameFrame;
 
     /**
      * Class constructor.
      * @param game : the current chess game that we're setting up the GUI for
      */
     public chessBoardGUI(chessGame game) {
-        JFrame gameFrame = new JFrame("Chess Board"); //first setup the top-level window and initialize and add the panels
+        //initialize move-history list
+        moveHistory = new ArrayList<>();
+
+        //take user input for player names
+        game.playerOneName = askName("Player 1's (white pieces) name");
+        game.playerTwoName = askName("Player 2's (black pieces) name");
+        //handle the cases when no name is entered
+        if(game.playerOneName == null || game.playerOneName.isEmpty()) game.playerOneName = "player 1";
+        if(game.playerTwoName == null || game.playerTwoName.isEmpty()) game.playerTwoName = "player 2";
+        //check for uniqueness of names
+        while(game.playerTwoName.compareTo(game.playerOneName) == 0) {
+            JOptionPane.showMessageDialog(null, "Player 1 has already taken that name, please choose a different one.", "NAME ERROR", JOptionPane.ERROR_MESSAGE);
+            game.playerTwoName = askName("Player 2's (black pieces) name");
+        }
+
+        //first setup the top-level window and initialize and add the panels
+        gameFrame = new JFrame("Chess Board");
         gameFrame.setSize(FRAME_DIMENSION);
         gameFrame.setLayout(new BorderLayout());
         boardPanel = new boardPanel(game);
         gameFrame.add(boardPanel, BorderLayout.CENTER);
+        boardPanel.setBorder(new EtchedBorder(EtchedBorder.RAISED));
+
+        //add the menu bar for extra functionality
+        final JMenuBar tableMenuBar = new JMenuBar();
+        addMenuBarEntries(game, tableMenuBar);
+        gameFrame.setJMenuBar(tableMenuBar);
+
+        //add the name labels to the frame
+        gameFrame.add(new JLabel(game.playerOneName, SwingConstants.CENTER), BorderLayout.SOUTH);
+        gameFrame.add(new JLabel(game.playerTwoName, SwingConstants.CENTER), BorderLayout.NORTH);
+
+        //make the window visible
         gameFrame.setVisible(true);
     }
 
+    /**
+     * A function which asks the players their names
+     * @param title : title of the dialog box
+     * @return : name entered by the user
+     */
+    public String askName(String title) {
+        String[] options = {"OK"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Enter Your name: ");
+        JTextField text = new JTextField(10);
+        panel.add(label);
+        panel.add(text);
+        int selectedOption = JOptionPane.showOptionDialog(null, panel, title,
+                JOptionPane.NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options , options[0]);
+
+        if(selectedOption == 0)
+        {
+            return text.getText();
+        }
+        return null;
+    }
+
+    /**
+     * Adds menu options to the menu bar
+     * @param tableMenuBar : top-level menu bar on which options are being added
+     */
+    private void addMenuBarEntries(chessGame game, JMenuBar tableMenuBar) {
+        JMenu options = new JMenu("Options");
+        JMenuItem forfeit = new JMenuItem("Forfeit", KeyEvent.VK_ESCAPE);
+        forfeit.addActionListener(e -> showDialogBox(game, "FORFEIT", "Are you sure?"));
+        options.add(forfeit);
+
+        JMenuItem restart = new JMenuItem("Restart", KeyEvent.VK_R);
+        restart.addActionListener(e -> {
+            if(game.isBlackTurn) showDialogBox(game, "RESTART", "Is " + game.playerOneName + " sure?");
+            else showDialogBox(game, "RESTART", "Is " + game.playerTwoName + " sure?");
+        });
+        options.add(restart);
+
+        JMenuItem score = new JMenuItem("Score", KeyEvent.VK_S);
+        score.addActionListener(e -> {
+            JPanel scorePanel = new JPanel();
+            JLabel player1Label = new JLabel(game.playerOneName +"'s score is: " + game.chess.player1.score);
+            JLabel player2Label = new JLabel(game.playerTwoName + "'s score is: " + game.chess.player2.score);
+            scorePanel.add(player1Label);
+            scorePanel.add(player2Label);
+            JOptionPane.showMessageDialog(null, scorePanel, "SCORE", JOptionPane.INFORMATION_MESSAGE);
+        });
+        options.add(score);
+
+        tableMenuBar.add(options);
+    }
+
+    /**
+     * A helper function for showing a warning dialog box
+     * @param game : current game
+     * @param windowTitle : dialog box title
+     * @param labelText : label message text
+     */
+    private void showDialogBox(chessGame game, String windowTitle, String labelText) {
+        String[] options = {"YES", "NO"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel(labelText);
+        panel.add(label);
+        int selectedOption = JOptionPane.showOptionDialog(null, panel, windowTitle,
+                JOptionPane.NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options);
+
+        if(selectedOption == 0)
+        {
+            if(windowTitle.compareTo("FORFEIT") == 0) {
+                //update the player scores
+                if (game.isBlackTurn) {
+                    game.chess.player1.score++;
+                } else game.chess.player2.score++;
+
+                System.exit(0);
+            } else if(windowTitle.compareTo("RESTART") == 0) {
+                gameFrame.dispose();
+                chessController newGame = new chessController();
+            }
+        }
+    }
 
     /**
      * This class sets up the board handle on the window.
@@ -96,31 +216,9 @@ public class chessBoardGUI {
             this.coordinateY = coordinateY;
             setPreferredSize(PIECE_DIMENSION);
             assignPieceColor();
-             assignButtonToPiece(game);
+            assignPieceImage(game.chess);
             validate();
 
-        }
-
-        /**
-         * This function adds a button to each piece and removes its default background and border and places a piece image instead.
-         * @param game : current game on which the pieces are being added
-         */
-        private void assignButtonToPiece(chessGame game) {
-            button = new JButton();
-            button.setOpaque(false);
-            button.setContentAreaFilled(false);
-            button.setBorderPainted(false);
-            if(game.chess.board[this.coordinateX][this.coordinateY] != null) {
-                try {
-                    final BufferedImage image = ImageIO.read(getClass().getResource("Assets/" + game.chess.board[coordinateX][coordinateY] + ".png"));
-                    button.setIcon(new ImageIcon(image));
-                    button.setBorder(null);
-                    button.setBackground(null);
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            this.add(button);
         }
 
         /**
@@ -148,13 +246,29 @@ public class chessBoardGUI {
         }
 
         /**
+         * This function assigns each piece tile an image based on the piece tile's location
+         * @param gameBoard : The gameBoard on which the pieces are placed.
+         */
+        private void assignPieceImage(final chessBoard gameBoard) {
+            this.removeAll();
+            if(gameBoard.board[this.coordinateX][this.coordinateY] != null) {
+                try {
+                    final BufferedImage image = ImageIO.read(getClass().getResource("Assets/" + gameBoard.board[coordinateX][coordinateY] + ".png"));
+                    add(new JLabel(new ImageIcon(image)));
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        /**
          * A function which redraws all the pieces whenever a move is made
          * @param game : current game
          */
         private void drawPiece(chessGame game) {
             this.removeAll();
             assignPieceColor();
-            assignButtonToPiece(game);
+            assignPieceImage(game.chess);
             validate();
             repaint();
         }

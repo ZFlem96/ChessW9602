@@ -12,8 +12,11 @@ import static Model.pieces.pieceType.*;
 public class chessGame {
     public chessBoard chess;
     private boolean isWhiteTurn = true; //initial game condition, white piece always goes first
-    private boolean isBlackTurn = false;
+    public boolean isBlackTurn = false;
     public String errorMessage = null; //error message used to show errors to the players in the GUI
+    //the following variables are used alongside the GUI
+    public String playerOneName; //name of player one (white)
+    public String playerTwoName; //name of player two (black)
 
     /**
      * Class constructor
@@ -59,11 +62,11 @@ public class chessGame {
         //check if player turns are correct
         if(piece.getPieceColor() == BLACK && !isBlackTurn) {
             System.out.println("MOVE ERROR: It's white piece's turn.");
-            errorMessage = "It's white piece's turn.";
+            errorMessage = "It's " + playerOneName + "'s turn.";
             return false;
         } else if(piece.getPieceColor() == WHITE && !isWhiteTurn) {
             System.out.println("MOVE ERROR: It's black piece's turn.");
-            errorMessage = "It's black piece's turn.";
+            errorMessage = "It's " + playerTwoName + "'s turn.";
             return false;
         }
 
