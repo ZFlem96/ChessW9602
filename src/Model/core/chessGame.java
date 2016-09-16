@@ -13,6 +13,7 @@ public class chessGame {
     public chessBoard chess;
     private boolean isWhiteTurn = true; //initial game condition, white piece always goes first
     private boolean isBlackTurn = false;
+    public String errorMessage = null; //error message used to show errors to the players in the GUI
 
     /**
      * Class constructor
@@ -37,6 +38,7 @@ public class chessGame {
             }
         } else {
             System.out.println("MOVE ERROR: This is not a valid move for the piece.");
+            errorMessage = "This is not a valid move for the piece.";
         }
     }
 
@@ -57,15 +59,18 @@ public class chessGame {
         //check if player turns are correct
         if(piece.getPieceColor() == BLACK && !isBlackTurn) {
             System.out.println("MOVE ERROR: It's white piece's turn.");
+            errorMessage = "It's white piece's turn.";
             return false;
         } else if(piece.getPieceColor() == WHITE && !isWhiteTurn) {
             System.out.println("MOVE ERROR: It's black piece's turn.");
+            errorMessage = "It's black piece's turn.";
             return false;
         }
 
         //if destination is same as current coordinate, render move as invalid
         if(destinationX == piece.boardCoordinates.x && destinationY == piece.boardCoordinates.y) {
             System.out.println("MOVE ERROR: current and final coordinates are same.");
+            errorMessage = "Current and final coordinates are same.";
             return false;
         }
         else {
@@ -95,6 +100,7 @@ public class chessGame {
         for(int i=0; i<moveList[0].length; i++){
             if(chess.board[moveList[0][i]][moveList[1][i]] != null){
                 System.out.println("MOVE ERROR: invalid leap attempt.");
+                errorMessage = "Invalid leap attempt.";
                 return false;
             }
         }
@@ -119,6 +125,7 @@ public class chessGame {
 
         }
         System.out.println("MOVE ERROR: your move is out of board bounds.");
+        errorMessage = "Your move is out of board bounds.";
         return false;
     }
 
@@ -135,6 +142,7 @@ public class chessGame {
             //if not, check for color
             if (piece.getPieceColor() == chess.board[destinationX][destinationY].getPieceColor()) {
                 System.out.println("MOVE ERROR: your move makes the piece land on another piece of same color.");
+                errorMessage = "Your move makes the piece land on another piece of same color.";
                 return false;
             }
         }
@@ -158,6 +166,7 @@ public class chessGame {
         if((piece.getPieceColor() == WHITE && isKingInCheck(whiteKing, whiteKing.boardCoordinates.x, whiteKing.boardCoordinates.y)) ||
                 (piece.getPieceColor() == BLACK && isKingInCheck(blackKing, blackKing.boardCoordinates.x, blackKing.boardCoordinates.y))) {
             System.out.printf("MOVE ERROR: Your move places you king in check.");
+            errorMessage = "Your move places you king in check.";
             chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = piece;
             return;
         }
@@ -184,7 +193,7 @@ public class chessGame {
         piece.boardCoordinates.y = destinationY;
 
         chess.board[destinationX][destinationY] = piece;
-
+        errorMessage = null;
         System.out.println("FATALITY!");
     }
 
