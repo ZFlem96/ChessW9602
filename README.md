@@ -2,7 +2,7 @@
 A simple Chess Library written in Java with the GUI written in Swings.
 
 ### The project is divided between three packages:
-- 'Model' containing the core logic, the board setup and the test suite for the logic. 
+- 'Model' containing the core logic, the board setup and the test suite containing unit-tests for the game logic. 
 - 'View' which contains an implementation of a static GUI. (Two JPanels representing the board and the pieces sitting on top of a JFrame)
 - 'Controller' which connects the 'Model' and the 'View' [See the class variables, just one instance of Model and View each]
 - The 'MVC' package has a single class called 'game'. Run the Main method in this file to launch the application (Such data abstraction). 
