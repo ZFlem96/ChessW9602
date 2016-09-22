@@ -9,9 +9,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38e76643-9e05-453d-9df9-a2f4bb762aec" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/core/chessGame.java" afterPath="$PROJECT_DIR$/src/Model/core/chessGame.java" />
-    </list>
+    <list default="true" id="38e76643-9e05-453d-9df9-a2f4bb762aec" name="Default" comment="" />
     <ignored path="Chess.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -807,7 +805,7 @@
       <workItem from="1474073249752" duration="5849000" />
       <workItem from="1474158594143" duration="134000" />
       <workItem from="1474170032732" duration="7484000" />
-      <workItem from="1474498067678" duration="20136000" />
+      <workItem from="1474498067678" duration="20184000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;MVC Complete!&quot;">
       <created>1474535602581</created>
@@ -852,7 +850,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="184606000" />
+    <option name="totallyTimeSpent" value="184654000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
