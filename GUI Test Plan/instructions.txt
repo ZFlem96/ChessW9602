@@ -1,5 +1,0 @@
-Instructions to test the static board GUI:
-
-1) The initial board setup should look like board.png 
-2) All pieces can handle mouse events, clicking on any piece should print it's name and it's coordinates.
-   example: clicking on a white king would produce - wKing pressed at: (0, 4).

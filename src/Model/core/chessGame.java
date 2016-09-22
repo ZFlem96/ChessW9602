@@ -192,7 +192,7 @@ public class chessGame {
             System.out.println("MOVE ERROR: Your move places your king in check.");
             errorMessage = "Your move places you king in check.";
             chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = piece;
-
+            checkForTurns = true;
             return;
         }
 
@@ -217,7 +217,7 @@ public class chessGame {
                 piece.boardCoordinates.x = kingCoordinateX;
                 piece.boardCoordinates.y = kingCoordinateY;
                 chess.board[kingCoordinateX][kingCoordinateY] = piece;
-
+                checkForTurns = true;
                 return;
             }
 
@@ -269,12 +269,18 @@ public class chessGame {
         blackKing = chess.getKing(BLACK);
 
         //check for check
-        if(isKingInCheck(whiteKing, whiteKing.boardCoordinates.x, whiteKing.boardCoordinates.y)) {
+        if(isKingInCheck(whiteKing, whiteKing.boardCoordinates.x, whiteKing.boardCoordinates.y)
+                && !isKingInCheckmate(whiteKing)) {
             errorMessage = "white king in check";
             System.out.println("ALERT: white king in check");
-        } else if(isKingInCheck(blackKing, blackKing.boardCoordinates.x, blackKing.boardCoordinates.y)) {
+            checkForTurns = true;
+            return;
+        } else if(isKingInCheck(blackKing, blackKing.boardCoordinates.x, blackKing.boardCoordinates.y) &&
+                !isKingInCheckmate(blackKing)) {
             errorMessage = "black king in check";
             System.out.println("ALERT: black king in check");
+            checkForTurns = true;
+            return;
         }
 
         //check for checkmate
@@ -282,11 +288,15 @@ public class chessGame {
             endGameMessage = "white king is in checkmate, player2 won, do you want to play again?";
             System.out.println("ALERT: white king is in checkmate, player2 won. Do you want to play again?");
             chess.player2.score++;
+            checkForTurns = true;
+            return;
         } else if(isKingInCheckmate(blackKing)) {
             endGameMessage = "black king is in checkmate, player1 won, do you want to play again?";
             System.out.println("ALERT: black king is in checkmate, player1 won. Do you want to play again?");
             chess.player2.score++;
             chess.player1.score++;
+            checkForTurns = true;
+            return;
         }
 
         //we do need to check for player turns, turn it back on

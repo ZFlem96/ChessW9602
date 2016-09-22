@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+
 /**
  * This class handles the GUI for the board and the pieces on it.
  */
@@ -53,6 +55,7 @@ public class chessBoardGUI {
         gameFrame = new JFrame("Chess Board");
         gameFrame.setSize(FRAME_DIMENSION);
         gameFrame.setLayout(new BorderLayout());
+        gameFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         //Warn the user if they try to close the game window
         gameFrame.addWindowListener(new WindowAdapter() {
@@ -201,10 +204,10 @@ public class chessBoardGUI {
 
             } else if(windowTitle.compareTo("RESTART") == 0) {
                 gameFrame.dispose();
-                new chessController(0);
+                new chessController(1);
             } else if(windowTitle.compareTo("FAIRY PIECES") == 0) {
                 gameFrame.dispose();
-                new chessController(1);
+                new chessController(0);
             }
         }
     }
