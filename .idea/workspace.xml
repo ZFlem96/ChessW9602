@@ -9,50 +9,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38e76643-9e05-453d-9df9-a2f4bb762aec" name="Default" comment="&quot;MVC Complete!&quot;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Chess/Controller/scoreController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/Controller/scoreController.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Controller/chessController$1.class" afterPath="$PROJECT_DIR$/out/production/Chess/Controller/chessController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Controller/chessController.class" afterPath="$PROJECT_DIR$/out/production/Chess/Controller/chessController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/MVC/game.class" afterPath="$PROJECT_DIR$/out/production/Chess/MVC/game.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/core/chessBoard.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/core/chessBoard.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/core/chessGame.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/core/chessGame.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/pieces/Pieces.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/pieces/Pieces.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/pieces/coordinates.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/pieces/coordinates.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/bishopTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/bishopTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/boardSetupTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/boardSetupTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/checkmateTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/checkmateTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/ferzTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/ferzTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/kingTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/kingTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/knightTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/knightTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/pawnTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/pawnTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/queenTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/queenTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/rookTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/rookTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/stalemateTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/stalemateTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/wazirTests.class" afterPath="$PROJECT_DIR$/out/production/Chess/Model/testSuite/wazirTests.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/View/chessBoardGUI$boardPanel.class" afterPath="$PROJECT_DIR$/out/production/Chess/View/chessBoardGUI$boardPanel.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/View/chessBoardGUI$piecePanel.class" afterPath="$PROJECT_DIR$/out/production/Chess/View/chessBoardGUI$piecePanel.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess/View/chessBoardGUI.class" afterPath="$PROJECT_DIR$/out/production/Chess/View/chessBoardGUI.class" />
+    <list default="true" id="38e76643-9e05-453d-9df9-a2f4bb762aec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Controller/chessController.java" afterPath="$PROJECT_DIR$/src/Controller/chessController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/MVC/game.java" afterPath="$PROJECT_DIR$/src/MVC/game.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/core/chessBoard.java" afterPath="$PROJECT_DIR$/src/Model/core/chessBoard.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/core/chessGame.java" afterPath="$PROJECT_DIR$/src/Model/core/chessGame.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/pieces/Pieces.java" afterPath="$PROJECT_DIR$/src/Model/pieces/Pieces.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/pieces/coordinates.java" afterPath="$PROJECT_DIR$/src/Model/pieces/coordinates.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/bishopTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/bishopTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/boardSetupTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/boardSetupTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/checkmateTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/checkmateTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/ferzTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/ferzTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/kingTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/kingTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/knightTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/knightTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/pawnTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/pawnTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/queenTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/queenTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/rookTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/rookTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/stalemateTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/stalemateTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model/testSuite/wazirTests.java" afterPath="$PROJECT_DIR$/src/Model/testSuite/wazirTests.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/View/chessBoardGUI.java" afterPath="$PROJECT_DIR$/src/View/chessBoardGUI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
     </list>
     <ignored path="Chess.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -106,7 +65,7 @@
       <file leaf-file-name="chessBoardGUI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/View/chessBoardGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
+            <state relative-caret-position="1305">
               <caret line="99" column="59" selection-start-line="99" selection-start-column="59" selection-end-line="99" selection-end-column="59" />
               <folding />
             </state>
@@ -892,8 +851,16 @@
       <workItem from="1474073249752" duration="5849000" />
       <workItem from="1474158594143" duration="134000" />
       <workItem from="1474170032732" duration="7484000" />
-      <workItem from="1474498067678" duration="15294000" />
+      <workItem from="1474498067678" duration="15337000" />
     </task>
+    <task id="LOCAL-00001" summary="&quot;MVC Complete!&quot;">
+      <created>1474535602581</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1474535602581</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -929,7 +896,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="179764000" />
+    <option name="totallyTimeSpent" value="179807000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -1385,7 +1352,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/View/chessBoardGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
+        <state relative-caret-position="1305">
           <caret line="99" column="59" selection-start-line="99" selection-start-column="59" selection-end-line="99" selection-end-column="59" />
           <folding />
         </state>
