@@ -4,6 +4,7 @@ import Model.core.chessGame;
 import Model.pieces.Pieces;
 import View.chessBoardGUI;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -21,12 +22,15 @@ public class chessController {
     /**
      * Class constructor
      */
-    public chessController() {
-        game = new chessGame();
+    public chessController(int isAlternatePiece) {
+        game = new chessGame(isAlternatePiece);
         boardGUI = new chessBoardGUI(game);
         gameLoop();
     }
 
+    /**
+     * The game loop which makes the pieces move
+     */
     private void gameLoop() {
         ArrayList<View.chessBoardGUI.piecePanel> pieceList = boardGUI.boardPanel.boardPieces;
         final Pieces[] sourcePiece = {null}; //this is the piece user will select to move
@@ -35,7 +39,6 @@ public class chessController {
 
         //iterate through the piece panels and add a mouse event to each
         for(chessBoardGUI.piecePanel currentPiece : pieceList) {
-
             currentPiece.addMouseListener(new MouseListener() {
                 //store the piece current coordinate
                 int coordinateX = currentPiece.getCoordinateX();
@@ -43,42 +46,70 @@ public class chessController {
 
                 @Override
                 public void mouseClicked(final MouseEvent e) {
+
                     //display green border when a piece is clicked
                     currentPiece.setBorder(BorderFactory.createLineBorder(java.awt.Color.GREEN));
 
                     //player can undo current piece selection by clicking the right mouse button
-                    if(isRightMouseButton(e)){
+                    if (isRightMouseButton(e)) {
                         sourcePiece[0] = null;
                         currentPiece.setBorder(new EmptyBorder(0, 0, 0, 0));
                     } else {
-                        //for debugging purposes
-                        System.out.println(game.chess.board[coordinateX][coordinateY] + " pressed at: " + "(" +
-                                coordinateX + ", " + coordinateY + ")" + ".");
-
                         //means its the user's first click
-                        if (sourcePiece[0] == null) sourcePiece[0] = game.chess.board[coordinateX][coordinateY];
-                        else {
+                        if (sourcePiece[0] == null) {
+                            sourcePiece[0] = game.chess.board[coordinateX][coordinateY];
+                        } else {
                             //means it's the user's second click (selecting the destination)
                             destinationX[0] = coordinateX;
                             destinationY[0] = coordinateY;
+
                             game.movePieceTo(sourcePiece[0], destinationX[0], destinationY[0]);
                             SwingUtilities.invokeLater(() -> boardGUI.boardPanel.drawBoard(game));
 
                             //show error messages, if any!
-                            if (game.errorMessage != null) JOptionPane.showMessageDialog(null, game.errorMessage, "MOVE ERROR", JOptionPane.ERROR_MESSAGE);
+                            if (game.errorMessage != null)
+                                JOptionPane.showMessageDialog(null, game.errorMessage, "MOVE ERROR", JOptionPane.ERROR_MESSAGE);
 
+                            //show game ending messages, if any!
+                            if (game.endGameMessage != null) {
+                                String[] options = {"YES", "NO"};
+                                JPanel panel = new JPanel();
+                                JLabel label = new JLabel(game.endGameMessage);
+                                panel.add(label);
+                                int selectedOption = JOptionPane.showOptionDialog(null, panel, "GAME OVER",
+                                        JOptionPane.NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options);
+
+                                //if the user pressed YES, do something
+                                if (selectedOption == 0) {
+                                    boardGUI.gameFrame.dispose();
+                                    new chessController(1);
+                                } else if (selectedOption == 1) {
+                                    boardGUI.gameFrame.dispose();
+                                    System.exit(0);
+                                }
+                            }
                             sourcePiece[0] = null;
                         }
                     }
                 }
+
                 @Override
-                public void mouseEntered(final MouseEvent e) {currentPiece.setBorder(BorderFactory.createLineBorder(java.awt.Color.GREEN));}
+                public void mouseEntered(final MouseEvent e) {
+                    currentPiece.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
+                }
+
                 @Override
-                public void mouseExited(final MouseEvent e) {currentPiece.setBorder(new EmptyBorder(0, 0, 0, 0));}
+                public void mouseExited(final MouseEvent e) {
+                    currentPiece.setBorder(new EmptyBorder(0, 0, 0, 0));
+                }
+
                 @Override
-                public void mousePressed(final MouseEvent e) {}
+                public void mousePressed(final MouseEvent e) {
+                }
+
                 @Override
-                public void mouseReleased(final MouseEvent e) {}
+                public void mouseReleased(final MouseEvent e) {
+                }
             });
         }
     }

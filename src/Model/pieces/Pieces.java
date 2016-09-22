@@ -12,6 +12,7 @@ public abstract class Pieces {
     public Player player;
     private String pieceName = null; //for printing purposes
     public boolean isFirstTurn = true; //used only for pawns, as they can move two steps on first turn
+    public int howManyTimesPlayed = 0; //used only for pawns, as if a move is undone we want to restore the ability to move piece twice again if it was it's first turn
 
     /**
      * Class constructor

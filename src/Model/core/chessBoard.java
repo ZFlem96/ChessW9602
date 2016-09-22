@@ -30,11 +30,14 @@ public class chessBoard {
     public Pieces[][] board;
     public Player player1 = new Player(); //by default, p1 is WHITE
     public Player player2 = new Player(); //and p2 is BLACK
+    private int isAlternatePieces;
 
     /**
      * Class constructor
+     * @param isAlternatePiece : if we have to play with fairy pieces or not, 0 for yes, 1 for no
      */
-    public chessBoard() {
+    public chessBoard(int isAlternatePiece) {
+        this.isAlternatePieces = isAlternatePiece;
         board = new Pieces[files][ranks];
         setupPieces();
         populatePlayerArrays();
@@ -49,11 +52,18 @@ public class chessBoard {
             board[1][i] = new pawn(1, i, WHITE, this, player1);
             board[6][i] = new pawn(6, i, BLACK, this, player2);
         }
-        //setup the rooks
-        board[0][0] = new rook(0, 0, WHITE, this, player1);
-        board[0][7] = new rook(0, 7, WHITE, this, player1);
-        board[7][0] = new rook(7, 0, BLACK, this, player2);
-        board[7][7] = new rook(7, 7, BLACK, this, player2);
+        //setup the rooks/wazir
+        if(isAlternatePieces == 0) {
+            board[0][0] = new wazir(0, 0, WHITE, this, player1);
+            board[0][7] = new wazir(0, 7, WHITE, this, player1);
+            board[7][0] = new wazir(7, 0, BLACK, this, player2);
+            board[7][7] = new wazir(7, 7, BLACK, this, player2);
+        } else {
+            board[0][0] = new rook(0, 0, WHITE, this, player1);
+            board[0][7] = new rook(0, 7, WHITE, this, player1);
+            board[7][0] = new rook(7, 0, BLACK, this, player2);
+            board[7][7] = new rook(7, 7, BLACK, this, player2);
+        }
 
         //setup the knights
         board[0][1] = new knight(0, 1, WHITE, this, player1);
@@ -61,11 +71,18 @@ public class chessBoard {
         board[7][1] = new knight(7, 1, BLACK, this, player2);
         board[7][6] = new knight(7, 6, BLACK, this, player2);
 
-        //setup the bishops
-        board[0][2] = new bishop(0, 2, WHITE, this, player1);
-        board[0][5] = new bishop(0, 5, WHITE, this, player1);
-        board[7][2] = new bishop(7, 2, BLACK, this, player2);
-        board[7][5] = new bishop(7, 5, BLACK, this, player2);
+        //setup the bishops/ferz
+        if(isAlternatePieces == 0) {
+            board[0][2] = new ferz(0, 2, WHITE, this, player1);
+            board[0][5] = new ferz(0, 5, WHITE, this, player1);
+            board[7][2] = new ferz(7, 2, BLACK, this, player2);
+            board[7][5] = new ferz(7, 5, BLACK, this, player2);
+        } else {
+            board[0][2] = new bishop(0, 2, WHITE, this, player1);
+            board[0][5] = new bishop(0, 5, WHITE, this, player1);
+            board[7][2] = new bishop(7, 2, BLACK, this, player2);
+            board[7][5] = new bishop(7, 5, BLACK, this, player2);
+        }
 
         //setup the queens
         board[0][3] = new queen(0, 3, WHITE, this, player1);

@@ -29,7 +29,7 @@ public class checkmateTests {
     //run a stimulation of a case which puts black king in checkmate
     @Test
     public void checkmate() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 newGame.chess.board[i][j] = null;
@@ -62,7 +62,7 @@ public class checkmateTests {
     //run a stimulation of a case which is not in checkmate
     @Test
     public void notInCheckmate() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         assertFalse(newGame.isKingInCheckmate(newGame.chess.board[0][4]));
     }
 }

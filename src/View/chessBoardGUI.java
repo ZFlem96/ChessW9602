@@ -3,59 +3,74 @@ package View;
 import Controller.chessController;
 import Model.core.chessBoard;
 import Model.core.chessGame;
-import Model.pieces.Pieces;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-
-
 
 /**
  * This class handles the GUI for the board and the pieces on it.
  */
 public class chessBoardGUI {
 
-    private final static Dimension FRAME_DIMENSION = new Dimension(600, 600); //top-level window dimensions
-    private final static Dimension BOARD_DIMENSION = new Dimension(600, 600);
+    private final static Dimension FRAME_DIMENSION = new Dimension(800, 800); //top-level window dimensions
+    private final static Dimension BOARD_DIMENSION = new Dimension(800, 800);
     private final static Dimension PIECE_DIMENSION = new Dimension(10, 10); //dimension of each piece which will sit on the board
     private final Color lightPieceColor = Color.decode("#ffce9e");
     private final Color darkPieceColor = Color.decode("#d18b47");
     public chessBoardGUI.boardPanel boardPanel;
-    private final ArrayList<Pieces> moveHistory;
-    private JFrame gameFrame;
+    public JFrame gameFrame;
 
     /**
      * Class constructor.
      * @param game : the current chess game that we're setting up the GUI for
      */
     public chessBoardGUI(chessGame game) {
-        //initialize move-history list
-        moveHistory = new ArrayList<>();
-
         //take user input for player names
         game.playerOneName = askName("Player 1's (white pieces) name");
+        while(game.playerOneName == null || game.playerOneName.isEmpty()) game.playerOneName = askName("CANNOT LEAVE BLANK, Enter player 1's name");
         game.playerTwoName = askName("Player 2's (black pieces) name");
-        //handle the cases when no name is entered
-        if(game.playerOneName == null || game.playerOneName.isEmpty()) game.playerOneName = "player 1";
-        if(game.playerTwoName == null || game.playerTwoName.isEmpty()) game.playerTwoName = "player 2";
+        while(game.playerTwoName == null || game.playerTwoName.isEmpty()) game.playerTwoName = askName("CANNOT LEAVE BLANK, Enter player 2's name");
         //check for uniqueness of names
-        while(game.playerTwoName.compareTo(game.playerOneName) == 0) {
-            JOptionPane.showMessageDialog(null, "Player 1 has already taken that name, please choose a different one.", "NAME ERROR", JOptionPane.ERROR_MESSAGE);
-            game.playerTwoName = askName("Player 2's (black pieces) name");
+        while(game.playerTwoName != null && game.playerTwoName.equals(game.playerOneName)) {
+                JOptionPane.showMessageDialog(null, "Player 1 has already taken that name, please choose a different one.", "NAME ERROR", JOptionPane.ERROR_MESSAGE);
+                game.playerTwoName = askName("Player 2's (black pieces) name");
         }
 
+        resetBoard(game);
+    }
+
+    /**
+     * A function to reset the board
+     * @param game : current game being played
+     */
+    private void resetBoard(chessGame game) {
         //first setup the top-level window and initialize and add the panels
         gameFrame = new JFrame("Chess Board");
         gameFrame.setSize(FRAME_DIMENSION);
         gameFrame.setLayout(new BorderLayout());
+
+        //Warn the user if they try to close the game window
+        gameFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                int yesOrNo = JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to quit the game?", "ALL PROGRESS WILL BE LOST",
+                        JOptionPane.YES_NO_OPTION);
+                if (yesOrNo == JOptionPane.YES_OPTION) {
+                    gameFrame.dispose();
+                    System.exit(0);
+                }
+            }
+        });
+
+        //add the name labels to the frame
+        gameFrame.add(new JLabel(game.playerOneName, SwingConstants.CENTER), BorderLayout.SOUTH);
+        gameFrame.add(new JLabel(game.playerTwoName, SwingConstants.CENTER), BorderLayout.NORTH);
+
         boardPanel = new boardPanel(game);
         gameFrame.add(boardPanel, BorderLayout.CENTER);
         boardPanel.setBorder(new EtchedBorder(EtchedBorder.RAISED));
@@ -64,10 +79,6 @@ public class chessBoardGUI {
         final JMenuBar tableMenuBar = new JMenuBar();
         addMenuBarEntries(game, tableMenuBar);
         gameFrame.setJMenuBar(tableMenuBar);
-
-        //add the name labels to the frame
-        gameFrame.add(new JLabel(game.playerOneName, SwingConstants.CENTER), BorderLayout.SOUTH);
-        gameFrame.add(new JLabel(game.playerTwoName, SwingConstants.CENTER), BorderLayout.NORTH);
 
         //make the window visible
         gameFrame.setVisible(true);
@@ -78,7 +89,7 @@ public class chessBoardGUI {
      * @param title : title of the dialog box
      * @return : name entered by the user
      */
-    public String askName(String title) {
+    private String askName(String title) {
         String[] options = {"OK"};
         JPanel panel = new JPanel();
         JLabel label = new JLabel("Enter Your name: ");
@@ -100,7 +111,22 @@ public class chessBoardGUI {
      * @param tableMenuBar : top-level menu bar on which options are being added
      */
     private void addMenuBarEntries(chessGame game, JMenuBar tableMenuBar) {
+        JMenu options = getOptionsMenu(game);
+        tableMenuBar.add(options);
+
+        JMenu preferences = getPreferencesMenu(game);
+        tableMenuBar.add(preferences);
+    }
+
+
+    /**
+     * A method which populates the option menu on the JMenu
+     * @param game : current game
+     * @return return JMenu 'Options' menu
+     */
+    private JMenu getOptionsMenu(chessGame game) {
         JMenu options = new JMenu("Options");
+
         JMenuItem forfeit = new JMenuItem("Forfeit", KeyEvent.VK_ESCAPE);
         forfeit.addActionListener(e -> showDialogBox(game, "FORFEIT", "Are you sure?"));
         options.add(forfeit);
@@ -123,7 +149,28 @@ public class chessBoardGUI {
         });
         options.add(score);
 
-        tableMenuBar.add(options);
+        JMenuItem undo = new JMenuItem("Undo last move", KeyEvent.VK_U);
+        undo.addActionListener(e -> {
+            game.undoLastMove();
+            SwingUtilities.invokeLater(() -> boardPanel.drawBoard(game));
+        });
+        options.add(undo);
+
+        return options;
+    }
+
+
+    /**
+     * A method which populates the Preferences menu
+     * @param game : current game
+     * @return : return JMenu 'Preferences' menu
+     */
+    private JMenu getPreferencesMenu(chessGame game) {
+        JMenu preferences = new JMenu("Preferences");
+        JMenuItem isAlternatePieces = new JMenuItem("Play with fairy pieces..", KeyEvent.VK_ALT);
+        isAlternatePieces.addActionListener(e -> showDialogBox(game, "FAIRY PIECES","Are you sure? Current game progress will be lost."));
+        preferences.add(isAlternatePieces);
+        return preferences;
     }
 
     /**
@@ -140,6 +187,7 @@ public class chessBoardGUI {
         int selectedOption = JOptionPane.showOptionDialog(null, panel, windowTitle,
                 JOptionPane.NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options);
 
+        //if the user pressed YES, do something
         if(selectedOption == 0)
         {
             if(windowTitle.compareTo("FORFEIT") == 0) {
@@ -148,10 +196,15 @@ public class chessBoardGUI {
                     game.chess.player1.score++;
                 } else game.chess.player2.score++;
 
+                gameFrame.dispose();
                 System.exit(0);
+
             } else if(windowTitle.compareTo("RESTART") == 0) {
                 gameFrame.dispose();
-                chessController newGame = new chessController();
+                new chessController(0);
+            } else if(windowTitle.compareTo("FAIRY PIECES") == 0) {
+                gameFrame.dispose();
+                new chessController(1);
             }
         }
     }
@@ -201,7 +254,6 @@ public class chessBoardGUI {
     public class piecePanel extends JPanel {
         private final int coordinateX;
         private final int coordinateY;
-        public JButton button;
 
         /**
          * Class constructor
@@ -218,7 +270,6 @@ public class chessBoardGUI {
             assignPieceColor();
             assignPieceImage(game.chess);
             validate();
-
         }
 
         /**
@@ -254,7 +305,7 @@ public class chessBoardGUI {
             if(gameBoard.board[this.coordinateX][this.coordinateY] != null) {
                 try {
                     final BufferedImage image = ImageIO.read(getClass().getResource("Assets/" + gameBoard.board[coordinateX][coordinateY] + ".png"));
-                    add(new JLabel(new ImageIcon(image)));
+                    add(new JLabel(new ImageIcon(image.getScaledInstance(50, 50, Image.SCALE_SMOOTH))));
                 } catch(IOException e) {
                     e.printStackTrace();
                 }

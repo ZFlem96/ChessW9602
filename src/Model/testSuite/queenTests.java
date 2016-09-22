@@ -13,7 +13,7 @@ public class queenTests {
     //move up and right
     @Test
     public void upRight() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(2, 1, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[2][1] = queen;
         newGame.movePieceTo(queen, 5, 4);
@@ -24,7 +24,7 @@ public class queenTests {
     //move up and left
     @Test
     public void upLeft() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(2, 4, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[2][4] = queen;
         newGame.movePieceTo(queen, 5, 1);
@@ -35,7 +35,7 @@ public class queenTests {
     //move down and right
     @Test
     public void downRight() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(5, 1, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][1] = queen;
         newGame.movePieceTo(queen, 2, 4);
@@ -46,7 +46,7 @@ public class queenTests {
     //move down and left
     @Test
     public void downLeft() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(5, 4, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][4] = queen;
         newGame.movePieceTo(queen, 2, 1);
@@ -57,7 +57,7 @@ public class queenTests {
     //move up
     @Test
     public void up() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(3, 3, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[3][3] = queen;
         newGame.movePieceTo(queen, 5, 3);
@@ -68,7 +68,7 @@ public class queenTests {
     //move down
     @Test
     public void down() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(3, 3, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[3][3] = queen;
         newGame.movePieceTo(queen, 2, 3);
@@ -79,7 +79,7 @@ public class queenTests {
     //move left
     @Test
     public void left() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(3, 3, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[3][3] = queen;
         newGame.movePieceTo(queen, 3, 0);
@@ -90,7 +90,7 @@ public class queenTests {
     //move right
     @Test
     public void right() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(3, 3, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[3][3] = queen;
         newGame.movePieceTo(queen, 3, 7);
@@ -101,7 +101,7 @@ public class queenTests {
     //test for a move a queen cannot make
     @Test
     public void testIllegalMove() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(5, 4, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][4] = queen;
         newGame.movePieceTo(queen, 3, 5);
@@ -112,7 +112,7 @@ public class queenTests {
     //test for initial=destination location
     @Test
     public void sameLocation() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(5, 1, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][1] = queen;
         newGame.movePieceTo(queen, 5, 1);
@@ -123,7 +123,7 @@ public class queenTests {
     //test if queen can leap other Model.pieces
     @Test
     public void canLeap() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(5, 1, WHITE, newGame.chess, newGame.chess.player1);
         Pieces queenToLeap = new queen(4, 2, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][1] = queen;
@@ -135,21 +135,21 @@ public class queenTests {
     //test if destination is in bounds
     @Test
     public void isInBounds() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         assertFalse(newGame.isInBounds(5, 8));
     }
 
     //test if destination is on a piece of same color
     @Test
     public void isDestinationOnSamePieceColor() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         assertFalse(newGame.isDestinationOnSamePieceColor(newGame.chess.board[0][3], 1, 3));
     }
 
     //test killing of a piece by the queen
     @Test
     public void canKill() {
-        chessGame newGame = new chessGame();
+        chessGame newGame = new chessGame(1);
         Pieces queen = new queen(4, 1, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[4][1] = queen;
         newGame.movePieceTo(queen, 6, 3);

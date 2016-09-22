@@ -1,6 +1,8 @@
 package Model.core;
 
 import Model.pieces.Pieces;
+import Model.pieces.coordinates;
+
 import java.util.ArrayList;
 import static Model.pieces.Color.*;
 import static Model.pieces.pieceType.*;
@@ -17,12 +19,21 @@ public class chessGame {
     //the following variables are used alongside the GUI
     public String playerOneName; //name of player one (white)
     public String playerTwoName; //name of player two (black)
+    //source piece, used for undo
+    private Pieces sourcePiece;
+    private coordinates sourcePieceCoordinate;
+    //destination piece, user for undo
+    private Pieces destinationPiece;
+    private coordinates destinationPieceCoordinate;
+    public String endGameMessage = null;
+    private boolean checkForTurns = true;
 
     /**
      * Class constructor
+     * @param isAlternatePiece : 1 if regular board configuration needed, 0 if fairy piece board configuration needed
      */
-    public chessGame() {
-        chess = new chessBoard();
+    public chessGame(int isAlternatePiece) {
+        chess = new chessBoard(isAlternatePiece);
     }
 
     /**
@@ -60,16 +71,17 @@ public class chessGame {
      */
     public boolean checkMoveConstraints(Pieces piece, int destinationX, int destinationY) {
         //check if player turns are correct
-        if(piece.getPieceColor() == BLACK && !isBlackTurn) {
-            System.out.println("MOVE ERROR: It's white piece's turn.");
-            errorMessage = "It's " + playerOneName + "'s turn.";
-            return false;
-        } else if(piece.getPieceColor() == WHITE && !isWhiteTurn) {
-            System.out.println("MOVE ERROR: It's black piece's turn.");
-            errorMessage = "It's " + playerTwoName + "'s turn.";
-            return false;
+        if(checkForTurns) {
+            if (piece.getPieceColor() == BLACK && !isBlackTurn) {
+                System.out.println("MOVE ERROR: It's white piece's turn.");
+                errorMessage = "It's " + playerOneName + "'s turn.";
+                return false;
+            } else if (piece.getPieceColor() == WHITE && !isWhiteTurn) {
+                System.out.println("MOVE ERROR: It's black piece's turn.");
+                errorMessage = "It's " + playerTwoName + "'s turn.";
+                return false;
+            }
         }
-
         //if destination is same as current coordinate, render move as invalid
         if(destinationX == piece.boardCoordinates.x && destinationY == piece.boardCoordinates.y) {
             System.out.println("MOVE ERROR: current and final coordinates are same.");
@@ -94,7 +106,7 @@ public class chessGame {
      */
     public boolean canLeap(Pieces piece, int destinationX, int destinationY) {
         //Knights are allowed to leap, Kings, Wazir and Ferz have no path so no leaping possibility
-        if(piece.getPieceType() == Knight || piece .getPieceType() == King
+        if(piece.getPieceType() == Knight || piece.getPieceType() == King
                 || piece.getPieceType() == Wazir || piece.getPieceType() == Ferz) return true;
 
         int[][] moveList = piece.getMoveList(destinationX, destinationY);
@@ -159,45 +171,172 @@ public class chessGame {
      * @param destinationY : y coordinate of destination
      */
     private void setPieceLocation(Pieces piece, int destinationX, int destinationY) {
+
+        endGameMessage = null;
+        //during checks for stalemate, checkmate and check, we turn off the checks for player turns
+        checkForTurns = false;
+
+        sourcePiece = piece;
+        sourcePieceCoordinate = new coordinates(piece.boardCoordinates.x, piece.boardCoordinates.y);
+
         //make the piece coordinates on the board = null
-        chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = null;
+        if(piece.getPieceType() != King) chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = null;
 
         Pieces whiteKing = chess.getKing(WHITE);
         Pieces blackKing = chess.getKing(BLACK);
 
+        // ======================================= CHECK IF MOVE PLACES KING IN CHECK ============================================== //
         //check if the move places king in check, if it does, don't move!
         if((piece.getPieceColor() == WHITE && isKingInCheck(whiteKing, whiteKing.boardCoordinates.x, whiteKing.boardCoordinates.y)) ||
                 (piece.getPieceColor() == BLACK && isKingInCheck(blackKing, blackKing.boardCoordinates.x, blackKing.boardCoordinates.y))) {
-            System.out.printf("MOVE ERROR: Your move places you king in check.");
+            System.out.println("MOVE ERROR: Your move places your king in check.");
             errorMessage = "Your move places you king in check.";
             chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = piece;
+
             return;
         }
+
+
+        if(piece.getPieceType() == King) {
+            int kingCoordinateX = piece.boardCoordinates.x;
+            int kingCoordinateY = piece.boardCoordinates.y;
+
+            chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = null;
+            piece.boardCoordinates.x = destinationX;
+            piece.boardCoordinates.y = destinationY;
+            chess.board[destinationX][destinationY] = piece;
+
+
+            //check if move places king in check
+            if(isKingInCheck(piece, piece.boardCoordinates.x, piece.boardCoordinates.y)) {
+                errorMessage = "Your move places your king in check.";
+                System.out.println("Your move places your king in check.");
+
+                //revert back to old configuration
+                chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = null;
+                piece.boardCoordinates.x = kingCoordinateX;
+                piece.boardCoordinates.y = kingCoordinateY;
+                chess.board[kingCoordinateX][kingCoordinateY] = piece;
+
+                return;
+            }
+
+            //revert back to old configuration
+            chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = null;
+            piece.boardCoordinates.x = kingCoordinateX;
+            piece.boardCoordinates.y = kingCoordinateY;
+            chess.board[kingCoordinateX][kingCoordinateY] = piece;
+
+        }
+
+
+        if(piece.getPieceType() == King) chess.board[piece.boardCoordinates.x][piece.boardCoordinates.y] = null;
 
         //if it's the players first move, toggle it to false
         if(piece.getPieceType() == Pawn && piece.isFirstTurn) {
             piece.isFirstTurn = false;
+            piece.howManyTimesPlayed++;
         }
 
-        //toggle turns of black and white Model.pieces
-        isWhiteTurn = !isWhiteTurn;
-        isBlackTurn = !isBlackTurn;
+        //toggle turns of black and white pieces
+        toggleTurns();
 
         //remove the player which is being killed from the appropriate arrayLists
-        if(piece.getPieceColor() == WHITE) {
-            chess.player1.playerPieces.remove(piece);
-            chess.player2.opponentPieces.remove(piece);
-        } else {
-            chess.player2.playerPieces.remove(piece);
-            chess.player1.opponentPieces.remove(piece);
+        if(chess.board[destinationX][destinationY] != null) {
+            Pieces removePiece = chess.board[destinationX][destinationY];
+            if (removePiece.getPieceColor() == WHITE) {
+                chess.player1.playerPieces.remove(removePiece);
+                chess.player2.opponentPieces.remove(removePiece);
+            } else if(removePiece.getPieceColor() == BLACK){
+                chess.player2.playerPieces.remove(removePiece);
+                chess.player1.opponentPieces.remove(removePiece);
+            }
         }
 
+        //update the piece's new coordinates
         piece.boardCoordinates.x = destinationX;
         piece.boardCoordinates.y = destinationY;
 
+        //update destination piece and coordinates for undo functions
+        destinationPiece = chess.board[destinationX][destinationY];
+        destinationPieceCoordinate = new coordinates(destinationX, destinationY);
+
+        //place the piece at its new location
         chess.board[destinationX][destinationY] = piece;
+
+        //get kings back
+        whiteKing = chess.getKing(WHITE);
+        blackKing = chess.getKing(BLACK);
+
+        //check for check
+        if(isKingInCheck(whiteKing, whiteKing.boardCoordinates.x, whiteKing.boardCoordinates.y)) {
+            errorMessage = "white king in check";
+            System.out.println("ALERT: white king in check");
+        } else if(isKingInCheck(blackKing, blackKing.boardCoordinates.x, blackKing.boardCoordinates.y)) {
+            errorMessage = "black king in check";
+            System.out.println("ALERT: black king in check");
+        }
+
+        //check for checkmate
+        if(isKingInCheckmate(whiteKing)) {
+            endGameMessage = "white king is in checkmate, player2 won, do you want to play again?";
+            System.out.println("ALERT: white king is in checkmate, player2 won. Do you want to play again?");
+            chess.player2.score++;
+        } else if(isKingInCheckmate(blackKing)) {
+            endGameMessage = "black king is in checkmate, player1 won, do you want to play again?";
+            System.out.println("ALERT: black king is in checkmate, player1 won. Do you want to play again?");
+            chess.player2.score++;
+            chess.player1.score++;
+        }
+
+        //we do need to check for player turns, turn it back on
+        checkForTurns = true;
+
+        //no errors if piece moved okay!
         errorMessage = null;
-        System.out.println("FATALITY!");
+    }
+
+    /**
+     * A function which toggle's the turns of white and black player
+     */
+    private void toggleTurns() {
+        isWhiteTurn = !isWhiteTurn;
+        isBlackTurn = !isBlackTurn;
+    }
+
+    /**
+     * A function to give the ability to a user to undo his last move.
+     */
+    public void undoLastMove() {
+        //undo piece movements
+        chess.board[sourcePieceCoordinate.x][sourcePieceCoordinate.y] = sourcePiece;
+        chess.board[sourcePieceCoordinate.x][sourcePieceCoordinate.y].boardCoordinates.x = sourcePieceCoordinate.x;
+        chess.board[sourcePieceCoordinate.x][sourcePieceCoordinate.y].boardCoordinates.y = sourcePieceCoordinate.y;
+
+        chess.board[destinationPieceCoordinate.x][destinationPieceCoordinate.y] = destinationPiece;
+
+
+        //if destination piece was not null, meaning someone was killed, do book-keeping of updating player arrayLists
+        if(destinationPiece != null) {
+            chess.board[destinationPieceCoordinate.x][destinationPieceCoordinate.y].boardCoordinates.x = destinationPieceCoordinate.x;
+            chess.board[destinationPieceCoordinate.x][destinationPieceCoordinate.y].boardCoordinates.y = destinationPieceCoordinate.y;
+
+            if(destinationPiece.getPieceColor() == BLACK) {
+                chess.player1.opponentPieces.add(destinationPiece);
+                chess.player2.playerPieces.add(destinationPiece);
+            } else if(destinationPiece.getPieceColor() == WHITE){
+                chess.player1.playerPieces.add(destinationPiece);
+                chess.player2.opponentPieces.add(destinationPiece);
+            }
+        }
+
+        //toggle turns of black and white pieces
+        toggleTurns();
+
+        //restore the ability of a pawn to move twice on first turn
+        if(sourcePiece.getPieceType() == Pawn && sourcePiece.howManyTimesPlayed == 1) {
+            sourcePiece.isFirstTurn = true;
+        }
     }
 
     // ======================================= GAME ENDING CONDITIONS ============================================== //
@@ -269,9 +408,6 @@ public class chessGame {
      * @return : true if it can move, false otherwise.
      */
     private boolean kingMovementValidator(Pieces king, int coordinateX, int coordinateY) {
-//        if(coordinateX < 0 || coordinateY < 0) return false;
-//        if(coordinateX >= chess.files || coordinateY >= chess.ranks) return false;
-
         return king.canMove(coordinateX, coordinateY) && checkMoveConstraints(king, coordinateX, coordinateY)
                 && !isKingInCheck(king, coordinateX, coordinateY);
     }
