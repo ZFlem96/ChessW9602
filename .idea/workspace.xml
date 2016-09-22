@@ -38,8 +38,13 @@
       <file leaf-file-name="chessController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller/chessController.java">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="-750">
               <caret line="31" column="48" selection-start-line="31" selection-start-column="48" selection-end-line="31" selection-end-column="48" />
+=======
+            <state relative-caret-position="2325">
+              <caret line="162" column="0" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
+>>>>>>> Stashed changes
               <folding>
                 <element signature="e#4530#4531#0" expanded="true" />
                 <element signature="e#4621#4622#0" expanded="true" />
@@ -801,11 +806,14 @@
       <workItem from="1472876859949" duration="91224000" />
       <workItem from="1473326721907" duration="31104000" />
       <workItem from="1473965716114" duration="10401000" />
+<<<<<<< Updated upstream
       <workItem from="1473990454860" duration="18274000" />
       <workItem from="1474073249752" duration="5849000" />
       <workItem from="1474158594143" duration="134000" />
       <workItem from="1474170032732" duration="7484000" />
       <workItem from="1474498067678" duration="20184000" />
+=======
+>>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00001" summary="&quot;MVC Complete!&quot;">
       <created>1474535602581</created>
@@ -850,7 +858,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< Updated upstream
     <option name="totallyTimeSpent" value="184654000" />
+=======
+    <option name="totallyTimeSpent" value="132729000" />
+>>>>>>> Stashed changes
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -1292,8 +1304,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/chessController.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="-750">
           <caret line="31" column="48" selection-start-line="31" selection-start-column="48" selection-end-line="31" selection-end-column="48" />
+=======
+        <state relative-caret-position="2325">
+          <caret line="162" column="0" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
+>>>>>>> Stashed changes
           <folding>
             <element signature="e#4530#4531#0" expanded="true" />
             <element signature="e#4621#4622#0" expanded="true" />
