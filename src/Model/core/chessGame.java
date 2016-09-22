@@ -113,7 +113,7 @@ public class chessGame {
 
         //if any square on the board, in the moveList of piece is not null, leaping is involved
         for(int i=0; i<moveList[0].length; i++){
-            if(chess.board[moveList[0][i]][moveList[1][i]] != null){
+            if(chess.board[moveList[1][i]][moveList[0][i]] != null){
                 System.out.println("MOVE ERROR: invalid leap attempt.");
                 errorMessage = "Invalid leap attempt.";
                 return false;
@@ -366,6 +366,9 @@ public class chessGame {
         for (Pieces opponentPiece : opponentPieces) {
             if (opponentPiece.canMove(coordinateX, coordinateY) &&
                     checkMoveConstraints(opponentPiece, coordinateX, coordinateY)) {
+                System.out.println(opponentPiece);
+                chess.printBord();
+                System.out.println(coordinateX + " | " + coordinateY);
                 return true;
             }
         }
