@@ -28,7 +28,7 @@ public class stalemateTests {
     //a stimulation to test the stalemate condition
     @Test
     public void isStalemate() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 newGame.chess.board[i][j] = null;

@@ -10,7 +10,7 @@ public class ferzTests {
     //up right movement
     @Test
     public void upRight() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         Pieces ferz = new ferz(2, 1, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[2][1] = ferz;
         newGame.movePieceTo(ferz, 3, 2);
@@ -21,7 +21,7 @@ public class ferzTests {
     //up and left movement
     @Test
     public void upLeft() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         Pieces ferz = new ferz(2, 4, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[2][4] = ferz;
         newGame.movePieceTo(ferz, 3, 3);
@@ -32,7 +32,7 @@ public class ferzTests {
     //down and right movement
     @Test
     public void downRight() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         Pieces ferz = new ferz(5, 1, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][1] = ferz;
         newGame.movePieceTo(ferz, 4, 2);
@@ -43,7 +43,7 @@ public class ferzTests {
     //down and left movement
     @Test
     public void downLeft() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         Pieces ferz = new ferz(5, 4, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][4] = ferz;
         newGame.movePieceTo(ferz, 4, 3);
@@ -54,7 +54,7 @@ public class ferzTests {
     //test for a move a bishop cannot make
     @Test
     public void testIllegalMove() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         Pieces ferz = new ferz(5, 4, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][4] = ferz;
         newGame.movePieceTo(ferz, 3, 2);
@@ -65,7 +65,7 @@ public class ferzTests {
     //test for destination = current location
     @Test
     public void sameLocation() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         Pieces ferz = new ferz(5, 1, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][1] = ferz;
         newGame.movePieceTo(ferz, 5, 1);
@@ -76,14 +76,14 @@ public class ferzTests {
     //test if destination is in board bounds
     @Test
     public void isInBounds() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         assertFalse(newGame.isInBounds(5, 8));
     }
 
     //test for a destination which has a piece of same color
     @Test
     public void isDestinationOnSamePieceColor() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         Pieces ferz = new ferz(2, 2, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[2][2] = ferz;
         assertFalse(newGame.isDestinationOnSamePieceColor(newGame.chess.board[2][2], 1, 1));
@@ -92,7 +92,7 @@ public class ferzTests {
     //test killing of another piece by the bishop
     @Test
     public void canKill() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         Pieces ferz = new ferz(5, 1, WHITE, newGame.chess, newGame.chess.player1);
         newGame.chess.board[5][1] = ferz;
         newGame.movePieceTo(ferz, 6, 2);

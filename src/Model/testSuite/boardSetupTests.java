@@ -43,7 +43,7 @@ public class boardSetupTests {
 
         System.out.println("ACTUAL RESULT:\n");
 
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
 
         newGame.chess.printBord();
     }
@@ -51,7 +51,7 @@ public class boardSetupTests {
     //test if black can make the first move (it cannot)
     @Test
     public void blackCannotTakeFirstTurn() {
-        chessGame newGame = new chessGame(1);
+        chessGame newGame = new chessGame(1, false);
         assertFalse(newGame.checkMoveConstraints(newGame.chess.board[6][0], 5, 0));
     }
 }

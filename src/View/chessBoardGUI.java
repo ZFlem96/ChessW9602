@@ -26,7 +26,7 @@ public class chessBoardGUI {
     private final Color darkPieceColor = Color.decode("#d18b47");
     public chessBoardGUI.boardPanel boardPanel;
     public JFrame gameFrame;
-
+    private boolean gamesIs960 = false;
     /**
      * Class constructor.
      * @param game : the current chess game that we're setting up the GUI for
@@ -173,6 +173,9 @@ public class chessBoardGUI {
         JMenuItem isAlternatePieces = new JMenuItem("Play with fairy pieces..", KeyEvent.VK_ALT);
         isAlternatePieces.addActionListener(e -> showDialogBox(game, "FAIRY PIECES","Are you sure? Current game progress will be lost."));
         preferences.add(isAlternatePieces);
+        JMenuItem is960Game = new JMenuItem("Play 960 style..", KeyEvent.VK_ALT);
+        isAlternatePieces.addActionListener(e -> showDialogBox(game, "960 STYLE","Are you sure? Current game progress will be lost."));
+        preferences.add(is960Game);
         return preferences;
     }
 
@@ -204,10 +207,15 @@ public class chessBoardGUI {
 
             } else if(windowTitle.compareTo("RESTART") == 0) {
                 gameFrame.dispose();
-                new chessController(1);
+                gamesIs960 = false;
+                new chessController(1, gamesIs960);
             } else if(windowTitle.compareTo("FAIRY PIECES") == 0) {
                 gameFrame.dispose();
-                new chessController(0);
+                new chessController(0, gamesIs960);
+            } else if (windowTitle.compareTo("960 STYLE") == 0) {
+                    gameFrame.dispose();
+                    gamesIs960 = true;
+                    new chessController(0, gamesIs960);
             }
         }
     }

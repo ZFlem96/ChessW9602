@@ -22,8 +22,8 @@ public class chessController {
     /**
      * Class constructor
      */
-    public chessController(int isAlternatePiece) {
-        game = new chessGame(isAlternatePiece);
+    public chessController(int isAlternatePiece, boolean is960Game) {
+    	game = new chessGame(isAlternatePiece, is960Game);
         boardGUI = new chessBoardGUI(game);
         gameLoop();
     }
@@ -82,7 +82,7 @@ public class chessController {
                                 //if the user pressed YES, do something
                                 if (selectedOption == 0) {
                                     boardGUI.gameFrame.dispose();
-                                    new chessController(1);
+                                    new chessController(1,game.chess.getIs960Game());
                                 } else if (selectedOption == 1) {
                                     boardGUI.gameFrame.dispose();
                                     System.exit(0);
