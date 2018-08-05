@@ -173,7 +173,7 @@ public class chessBoardGUI {
         JMenuItem isAlternatePieces = new JMenuItem("Play with fairy pieces..", KeyEvent.VK_ALT);
         isAlternatePieces.addActionListener(e -> showDialogBox(game, "FAIRY PIECES","Are you sure? Current game progress will be lost."));
         preferences.add(isAlternatePieces);
-        JMenuItem is960Game = new JMenuItem("Play 960 style..", KeyEvent.VK_ALT);
+        JMenuItem is960Game = new JMenuItem("Play 960 style..",KeyEvent.VK_ALT);
         isAlternatePieces.addActionListener(e -> showDialogBox(game, "960 STYLE","Are you sure? Current game progress will be lost."));
         preferences.add(is960Game);
         return preferences;
