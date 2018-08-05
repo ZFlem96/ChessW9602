@@ -28,6 +28,8 @@ public abstract class Pieces {
         this.pieceName = pieceName;
         this.player = player;
     }
+    
+    public Pieces() {}
 
     /**
      * Function which tells whether a move is valid for a given piece type
