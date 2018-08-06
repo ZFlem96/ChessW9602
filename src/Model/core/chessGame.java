@@ -32,10 +32,14 @@ public class chessGame {
      * Class constructor
      * @param isAlternatePiece : 1 if regular board configuration needed, 0 if fairy piece board configuration needed
      */
-    public chessGame(int isAlternatePiece, boolean is960Game) {
-        chess = new chessBoard(isAlternatePiece, is960Game);
+    public chessGame(int isAlternatePiece) {
+        chess = new chessBoard(isAlternatePiece);
     }
 
+    public chessGame(int isAlternatePiece, boolean isGame960) {
+        chess = new chessBoard(isAlternatePiece, isGame960);
+    }
+    
     /**
      * A function to move a piece to the destination. It does the following:
      * 1) Check whether a move is even valid for a piece.

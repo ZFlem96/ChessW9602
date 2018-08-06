@@ -27,6 +27,7 @@ public class chessBoardGUI {
     public chessBoardGUI.boardPanel boardPanel;
     public JFrame gameFrame;
     private boolean gamesIs960 = false;
+    private int alternatePieces = 1;
     /**
      * Class constructor.
      * @param game : the current chess game that we're setting up the GUI for
@@ -38,6 +39,7 @@ public class chessBoardGUI {
         game.playerTwoName = askName("Player 2's (black pieces) name");
         while(game.playerTwoName == null || game.playerTwoName.isEmpty()) game.playerTwoName = askName("CANNOT LEAVE BLANK, Enter player 2's name");
         //check for uniqueness of names
+        game.chess.setIs960Game(askGameType(game.chess));
         while(game.playerTwoName != null && game.playerTwoName.equals(game.playerOneName)) {
                 JOptionPane.showMessageDialog(null, "Player 1 has already taken that name, please choose a different one.", "NAME ERROR", JOptionPane.ERROR_MESSAGE);
                 game.playerTwoName = askName("Player 2's (black pieces) name");
@@ -108,6 +110,22 @@ public class chessBoardGUI {
         }
         return null;
     }
+    
+    private boolean askGameType(chessBoard game) {
+        String[] options = {"Regular","960"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Which Game Type would you prefer?");
+        panel.add(label);
+        boolean result = false;
+         int selectedOption = JOptionPane.showOptionDialog(null, panel, null,
+                JOptionPane.NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options , options[0]);
+
+        if(selectedOption == 1)
+        {
+            result = true;
+        } 
+        return result;
+    }
 
     /**
      * Adds menu options to the menu bar
@@ -173,9 +191,12 @@ public class chessBoardGUI {
         JMenuItem isAlternatePieces = new JMenuItem("Play with fairy pieces..", KeyEvent.VK_ALT);
         isAlternatePieces.addActionListener(e -> showDialogBox(game, "FAIRY PIECES","Are you sure? Current game progress will be lost."));
         preferences.add(isAlternatePieces);
-        JMenuItem is960Game = new JMenuItem("Play 960 style..", KeyEvent.VK_ALT);
-        isAlternatePieces.addActionListener(e -> showDialogBox(game, "960 STYLE","Are you sure? Current game progress will be lost."));
+        JMenuItem is960Game = new JMenuItem("Play 960 style..",KeyEvent.VK_ALT);
+        is960Game.addActionListener(e -> showDialogBox(game, "960 STYLE","Are you sure? Current game progress will be lost."));
         preferences.add(is960Game);
+        JMenuItem regularGame = new JMenuItem("Play Regular Game",KeyEvent.VK_ALT);
+        regularGame.addActionListener(e -> showDialogBox(game, "REGULAR GAME","Are you sure? Current game progress will be lost."));
+        preferences.add(regularGame);
         return preferences;
     }
 
@@ -207,16 +228,21 @@ public class chessBoardGUI {
 
             } else if(windowTitle.compareTo("RESTART") == 0) {
                 gameFrame.dispose();
-                gamesIs960 = false;
-                new chessController(1, gamesIs960);
+                new chessController(alternatePieces, gamesIs960);
             } else if(windowTitle.compareTo("FAIRY PIECES") == 0) {
                 gameFrame.dispose();
-                new chessController(0, gamesIs960);
+                alternatePieces = 0;
+                new chessController(alternatePieces, gamesIs960);
             } else if (windowTitle.compareTo("960 STYLE") == 0) {
                     gameFrame.dispose();
                     gamesIs960 = true;
-                    new chessController(0, gamesIs960);
-            }
+                    new chessController(alternatePieces, gamesIs960);
+            } else if (windowTitle.compareTo("REGULAR GAME") == 0) {
+                gameFrame.dispose();
+                gamesIs960 = false;
+                alternatePieces = 1;
+                new chessController(alternatePieces, gamesIs960);
+        }
         }
     }
 
