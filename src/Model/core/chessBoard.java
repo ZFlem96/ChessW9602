@@ -57,6 +57,13 @@ public class chessBoard {
 		populatePlayerArrays();
 	}
 
+	public chessBoard(int isAlternatePiece) {
+		this.isAlternatePieces = isAlternatePiece;
+		board = new Pieces[files][ranks];
+		setupPieces();
+		populatePlayerArrays();
+	}
+	
 	/**
 	 * A function to setup all the Model.pieces on the board.
 	 */

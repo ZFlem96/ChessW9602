@@ -7,6 +7,6 @@ import Controller.chessController;
  */
 public class game {
     public static void main(String[] args) {
-        chessController newGame = new chessController(1, false);
+        chessController newGame = new chessController(1);
     }
 }
