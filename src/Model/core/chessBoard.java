@@ -63,7 +63,7 @@ public class chessBoard {
 		setupPieces();
 		populatePlayerArrays();
 	}
-	
+
 	/**
 	 * A function to setup all the Model.pieces on the board.
 	 */
@@ -74,123 +74,7 @@ public class chessBoard {
 			board[6][i] = new pawn(6, i, BLACK, this, player2);
 		}
 		if (is960Game) {
-			/*
-			 * 960 Placement Rule Random, but The bishops must be placed on
-			 * opposite-color squares. The king must be placed on a square
-			 * between the rooks. 0 = rooks/wazir, 1 = knight, 2 = bishops/ferz,
-			 * 3 = queen, 4 = king
-			 */
-			ArrayList<Integer> pieces = new ArrayList<>(), usedPieces = new ArrayList<>();
-			pieces.add(0);
-			pieces.add(1);
-			pieces.add(2);
-			pieces.add(3);
-			pieces.add(4);
-			boolean endLoop = false, kingUsed = false, firstBishopOrFerzUsed = false, secondBishopOrFerz = false;
-			Random rand = new Random();
-			int index = 0;
-			int firstBishopOrFerz = -1;
-			while (index < 8) {
-				int selectedPiece = -1;
-				int matches = 0;
-				while (!endLoop) {
-					if (pieces.size() > 2) {
-						if (firstBishopOrFerzUsed && !kingUsed && pieces.size() == 3) {
-							selectedPiece = pieces.size() - 1;
-						} else {
-							selectedPiece = rand.nextInt(pieces.size() - 1);
-						}
-					} else if (pieces.size() == 2) {
-						if (firstBishopOrFerzUsed && kingUsed && !secondBishopOrFerz) {
-							if (index % 2 != 0 && firstBishopOrFerz % 2 == 0) {
-								for (int x =0;x<pieces.size();x++) {
-									if (pieces.get(x)==2) {
-										selectedPiece = x;
-										break;
-									}
-								}
-							}
-						} else {
-							selectedPiece = rand.nextInt(1);
-						}
-					} else {
-						selectedPiece = pieces.size() - 1;
-					}
-					if (pieces.get(selectedPiece) == 2) {
-						if (!firstBishopOrFerzUsed) {
-							endLoop = true;
-							firstBishopOrFerzUsed = true;
-							firstBishopOrFerz = selectedPiece;
-						} else if (firstBishopOrFerzUsed && pieces.get(selectedPiece) == 2 && kingUsed) {
-							if (index % 2 == 0 && firstBishopOrFerz % 2 != 0) {
-								endLoop = true;
-								matches++;
-								secondBishopOrFerz = true;
-							} else if (index % 2 != 0 && firstBishopOrFerz % 2 == 0) {
-								endLoop = true;
-								matches++;
-								secondBishopOrFerz = true;
-							}
-						}
-					} else if (pieces.get(selectedPiece) == 4) {
-						if (!kingUsed && firstBishopOrFerz > 0) {
-							kingUsed = true;
-							endLoop = true;
-						}
-					} else {
-						endLoop = true;
-					}
-					for (int x = 0; x < usedPieces.size(); x++) {
-						if (pieces.get(selectedPiece) == usedPieces.get(x)) {
-							matches++;
-						}
-					}
-				}
-				endLoop = pieces.size() < 0;
-				if (pieces.get(selectedPiece) == 0) {
-					if (isAlternatePieces == 0) {
-						board[0][index] = new wazir(0, index, WHITE, this, player1);
-						board[7][index] = new wazir(7, index, BLACK, this, player2);
-					} else {
-						board[0][index] = new rook(0, index, WHITE, this, player1);
-						board[7][index] = new rook(7, index, BLACK, this, player2);
-					}
-					usedPieces.add(selectedPiece);
-					if (matches > 0) {
-						pieces.remove(selectedPiece);
-					}
-				} else if (pieces.get(selectedPiece) == 1) {
-					board[0][index] = new knight(0, index, WHITE, this, player1);
-					board[7][index] = new knight(7, index, BLACK, this, player2);
-					usedPieces.add(selectedPiece);
-					if (matches > 0) {
-						pieces.remove(selectedPiece);
-					}
-				} else if (pieces.get(selectedPiece) == 2) {
-					usedPieces.add(selectedPiece);
-					if (isAlternatePieces == 0) {
-						board[0][index] = new ferz(0, index, WHITE, this, player1);
-						board[7][index] = new ferz(7, index, BLACK, this, player2);
-					} else {
-						board[0][index] = new bishop(0, index, WHITE, this, player1);
-						board[7][index] = new bishop(7, index, BLACK, this, player2);
-					}
-					if (matches > 0 && firstBishopOrFerzUsed && secondBishopOrFerz) {
-						pieces.remove(selectedPiece);
-					}
-				} else if (pieces.get(selectedPiece) == 3) {
-					usedPieces.add(selectedPiece);
-					board[0][index] = new queen(0, index, WHITE, this, player1);
-					board[7][index] = new queen(7, index, BLACK, this, player2);
-					pieces.remove(selectedPiece);
-				} else if (pieces.get(selectedPiece) == 4) {
-					usedPieces.add(selectedPiece);
-					board[0][index] = new king(0, index, WHITE, this, player1);
-					board[7][index] = new king(7, index, BLACK, this, player2);
-					pieces.remove(selectedPiece);
-				}
-				index++;
-			}
+			setup960Pieces();
 		} else {
 			// setup the rooks/wazir
 			if (isAlternatePieces == 0) {
@@ -232,6 +116,145 @@ public class chessBoard {
 			board[0][4] = new king(0, 4, WHITE, this, player1);
 			board[7][4] = new king(7, 4, BLACK, this, player2);
 
+		}
+	}
+
+	/*
+	 * 960 Placement Rule Random, but The bishops must be placed on
+	 * opposite-color squares. The king must be placed on a square between the
+	 * rooks. 0 = rooks/wazir, 1 = knight, 2 = bishops/ferz, 3 = queen, 4 = king
+	 */
+	private void setup960Pieces() {
+		ArrayList<Integer> pieces = new ArrayList<>(), usedPieces = new ArrayList<>();
+		pieces.add(0);
+		pieces.add(1);
+		pieces.add(2);
+		pieces.add(3);
+		pieces.add(4);
+		boolean endLoop = false, kingUsed = false, firstBishopOrFerzUsed = false, secondBishopOrFerz = false;
+		Random rand = new Random();
+		int index = 0;
+		int firstBishopOrFerz = -1;
+		while (index < 8) {
+			int selectedPiece = -1;
+			int matches = 0;
+			while (!endLoop) {
+				if (firstBishopOrFerzUsed && !secondBishopOrFerz) {
+					if (firstBishopOrFerz % 2 != 0 && index % 2 != 0) {
+						for (int x = 0; x < pieces.size(); x++) {
+							if (pieces.get(x) == 3) {
+								pieces.remove(x);
+								break;
+							}
+						}
+					} else if (firstBishopOrFerz % 2 == 0 && index % 2 == 0) {
+						for (int x = 0; x < pieces.size(); x++) {
+							if (pieces.get(x) == 3) {
+								pieces.remove(x);
+								break;
+							}
+						}
+					} else {
+						pieces.add(3);
+					}
+				}
+				if (pieces.size() > 2) {
+					if (firstBishopOrFerzUsed && !kingUsed && pieces.size() == 3) {
+						selectedPiece = pieces.size() - 1;
+					} else {
+						selectedPiece = rand.nextInt(pieces.size() - 1);
+					}
+				} else if (pieces.size() == 2) {
+					// if (firstBishopOrFerzUsed && kingUsed &&
+					// !secondBishopOrFerz) {
+					// if (index % 2 != 0 && firstBishopOrFerz % 2 == 0) {
+					// for (int x = 0; x < pieces.size(); x++) {
+					// if (pieces.get(x) == 2) {
+					// selectedPiece = x;
+					// break;
+					// }
+					// }
+					// }
+					// } else {
+					selectedPiece = rand.nextInt(1);
+					// }
+				} else {
+					selectedPiece = pieces.size() - 1;
+				}
+				if (pieces.get(selectedPiece) == 2) {
+					if (!firstBishopOrFerzUsed) {
+						endLoop = true;
+						firstBishopOrFerzUsed = true;
+						firstBishopOrFerz = selectedPiece;
+					} else if (firstBishopOrFerzUsed && pieces.get(selectedPiece) == 2 && kingUsed) {
+						if (index % 2 == 0 && firstBishopOrFerz % 2 != 0) {
+							endLoop = true;
+							matches++;
+							secondBishopOrFerz = true;
+						} else if (index % 2 != 0 && firstBishopOrFerz % 2 == 0) {
+							endLoop = true;
+							matches++;
+							secondBishopOrFerz = true;
+						}
+					}
+				} else if (pieces.get(selectedPiece) == 4) {
+					if (!kingUsed && firstBishopOrFerz > 0) {
+						kingUsed = true;
+						endLoop = true;
+					}
+				} else {
+					endLoop = true;
+				}
+				for (int x = 0; x < usedPieces.size(); x++) {
+					if (pieces.get(selectedPiece) == usedPieces.get(x)) {
+						matches++;
+					}
+				}
+			}
+			endLoop = pieces.size() < 0;
+			if (pieces.get(selectedPiece) == 0) {
+				if (isAlternatePieces == 0) {
+					board[0][index] = new wazir(0, index, WHITE, this, player1);
+					board[7][index] = new wazir(7, index, BLACK, this, player2);
+				} else {
+					board[0][index] = new rook(0, index, WHITE, this, player1);
+					board[7][index] = new rook(7, index, BLACK, this, player2);
+				}
+				usedPieces.add(selectedPiece);
+				if (matches > 0) {
+					pieces.remove(selectedPiece);
+				}
+			} else if (pieces.get(selectedPiece) == 1) {
+				board[0][index] = new knight(0, index, WHITE, this, player1);
+				board[7][index] = new knight(7, index, BLACK, this, player2);
+				usedPieces.add(selectedPiece);
+				if (matches > 0) {
+					pieces.remove(selectedPiece);
+				}
+			} else if (pieces.get(selectedPiece) == 2) {
+				usedPieces.add(selectedPiece);
+				if (isAlternatePieces == 0) {
+					board[0][index] = new ferz(0, index, WHITE, this, player1);
+					board[7][index] = new ferz(7, index, BLACK, this, player2);
+				} else {
+					board[0][index] = new bishop(0, index, WHITE, this, player1);
+					board[7][index] = new bishop(7, index, BLACK, this, player2);
+				}
+				if (matches > 0 && firstBishopOrFerzUsed && secondBishopOrFerz) {
+					pieces.remove(selectedPiece);
+				}
+			} else if (pieces.get(selectedPiece) == 3) {
+				usedPieces.add(selectedPiece);
+				board[0][index] = new queen(0, index, WHITE, this, player1);
+				board[7][index] = new queen(7, index, BLACK, this, player2);
+				pieces.remove(selectedPiece);
+			} else if (pieces.get(selectedPiece) == 4) {
+				usedPieces.add(selectedPiece);
+				board[0][index] = new king(0, index, WHITE, this, player1);
+				board[7][index] = new king(7, index, BLACK, this, player2);
+				pieces.remove(selectedPiece);
+			}
+			index++;
 		}
 	}
 
